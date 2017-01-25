@@ -2654,6 +2654,7 @@ text = [[
 *دستورات ربات بومباس:*
 *!setowner* `[username|id|reply]` 
 `انتخاب مالک گروه(قابل انتخاب چند مالک)`
+
 *!remowner* 
  `حذف کردن فرد از فهرست مالکان گروه`
 *!promote*  
@@ -2676,18 +2677,25 @@ text = [[
 `نمایش شناسه کاربر`
 *!whois* `[id]`
 `نمایش نام کاربر, نام کاربری و اطلاعات حساب`
+
 *!lock* `[link | tag | edit | webpage | bots | spam | flood | markdown | mention]`
 `در صورت قفل بودن فعالیت ها, ربات آنهارا حذف خواهد کرد`
+
 *!unlock* `[link | tag | edit | webpage | bots | spam | flood | markdown | mention]`
 `در صورت قفل نبودن فعالیت ها, ربات آنهارا حذف نخواهد کرد`
+
 *!mute* `[gifs | photo | document | sticker | video | text | forward | location | audio | voice | contact | all]`
 `در صورت بیصدد بودن فعالیت ها, ربات آنهارا حذف خواهد کرد`
+
 *!unmute* `[gifs | photo | document | sticker | video | text | forward | location | audio | voice | contact | all]`
 `در صورت بیصدا نبودن فعالیت ها, ربات آنهارا حذف نخواهد کرد`
+
 *!set*`[rules | name | photo | link | about]`
 `ربات آنهارا ثبت خواهد کرد`
+
 *!clean* `[bans | mods | bots | rules | about | silentlist]`   
 `ربات آنهارا پاک خواهد کرد`
+
 *!pin* `[reply]`
 `ربات پیام شمارا در گروه سنجاق خواهد کرد`
 *!unpin* 
