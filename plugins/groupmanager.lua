@@ -180,10 +180,10 @@ local function owner_cb(arg, data)
 local hash = "gp_lang:"..arg.chat_id
 local lang = redis:get(hash)
     local administration = load_data(_config.moderation.data)
- if data.username_ then
-  user_name = '@'..check_markdown(data.username_)
+if data.username_ and not data.username_:match("_") then
+user_name = '@'..data.username_
 else
- user_name = check_markdown(data.first_name_)
+user_name = data.first_name_
 end
 if administration[tostring(arg.chat_id)]['owners'][tostring(data.id_)] then
     if not lang then
@@ -210,10 +210,10 @@ local function promote_cb(arg, data)
 local hash = "gp_lang:"..arg.chat_id
 local lang = redis:get(hash)
     local administration = load_data(_config.moderation.data)
- if data.username_ then
-  user_name = '@'..check_markdown(data.username_)
+if data.username_ and not data.username_:match("_") then
+user_name = '@'..data.username_
 else
- user_name = check_markdown(data.first_name_)
+user_name = data.first_name_
 end
 if administration[tostring(arg.chat_id)]['mods'][tostring(data.id_)] then
    if not lang then
@@ -240,10 +240,10 @@ local function rem_owner_cb(arg, data)
 local hash = "gp_lang:"..arg.chat_id
 local lang = redis:get(hash)
     local administration = load_data(_config.moderation.data)
- if data.username_ then
-  user_name = '@'..check_markdown(data.username_)
+if data.username_ and not data.username_:match("_") then
+user_name = '@'..data.username_
 else
- user_name = check_markdown(data.first_name_)
+user_name = data.first_name_
 end
 if not administration[tostring(arg.chat_id)]['owners'][tostring(data.id_)] then
    if not lang then
@@ -268,10 +268,10 @@ tdcli_function ({
     if cmd == "demote" then
 local function demote_cb(arg, data)
     local administration = load_data(_config.moderation.data)
- if data.username_ then
-  user_name = '@'..check_markdown(data.username_)
+if data.username_ and not data.username_:match("_") then
+user_name = '@'..data.username_
 else
- user_name = check_markdown(data.first_name_)
+user_name = data.first_name_
 end
 if not administration[tostring(arg.chat_id)]['mods'][tostring(data.id_)] then
     if not lang then
@@ -316,10 +316,10 @@ else
     return tdcli.sendMessage(data.chat_id_, "", 0, "`گروه به لیست گروه های مدیریتی ربات اضافه نشده است`", 0, "md")
      end
   end
- if data.type_.user_.username_ then
-  user_name = '@'..check_markdown(data.type_.user_.username_)
+if data.type_.user_.username_ and not data.type_.user_.username_:match("_") then
+user_name = '@'..data.type_.user_.username_
 else
-user_name = check_markdown(data.title_)
+user_name = data.title_
 end
 if not arg.username then return false end
 if cmd == "setowner" then
@@ -391,15 +391,15 @@ end
 end
     if cmd == "res" then
     if not lang then
-    text = "Result for [ ".. check_markdown(data.type_.user_.username_) .." ] :\n"
-    .. "".. check_markdown(data.title_) .."\n"
+     text = "Result for [ ".. data.type_.user_.username_ .." ] :\n"
+    .. "".. data.title_ .."\n"
     .. " [".. data.id_ .."]"
   else
-    text = "اطلاعات برای [ ".. check_markdown(data.type_.user_.username_) .." ] :\n"
-    .. "".. check_markdown(data.title_) .."\n"
+     text = "اطلاعات برای [ ".. data.type_.user_.username_ .." ] :\n"
+    .. "".. data.title_ .."\n"
     .. " [".. data.id_ .."]"
-    return tdcli.sendMessage(arg.chat_id, 0, 1, text, 1, 'md')
-    end
+       return tdcli.sendMessage(arg.chat_id, 0, 1, text, 1)
+      end
    end
 end
 
@@ -417,10 +417,10 @@ else
   end
 if not tonumber(arg.user_id) then return false end
 if data.first_name_ then
- if data.username_ then
-  user_name = '@'..check_markdown(data.username_)
+if data.username_ and not data.username_:match("_") then
+user_name = '@'..data.username_
 else
-user_name = check_markdown(data.first_name_)
+user_name = data.first_name_
 end
   if cmd == "setowner" then
   if administration[tostring(arg.chat_id)]['owners'][tostring(data.id_)] then
@@ -488,7 +488,7 @@ administration[tostring(arg.chat_id)]['mods'][tostring(data.id_)] = nil
 end
     if cmd == "whois" then
 if data.username_ then
-username = '@'..check_markdown(data.username_)
+username = '@'..data.username_
 else
 if not lang then
 username = 'not found'
@@ -761,7 +761,7 @@ if lock_spam == "yes" then
 if not lang then
  return "`Spam Is Already Locked`"
 elseif lang then
- return "`ارسال هرزنامه در گروه هم اکنون ممنوع است`"
+ return "ارسال هرزنامه در گروه هم اکنون ممنوع است`"
 end
 else
  data[tostring(target)]["settings"]["lock_spam"] = "yes"
@@ -781,7 +781,7 @@ local lang = redis:get(hash)
 if not lang then
 return "`You're Not Moderator`"
 else
-return "`شما مدیر گروه نمیباشید`"
+return "شما مدیر گروه نمیباشید`"
 end
 end 
 
@@ -2555,7 +2555,7 @@ tdcli_function ({
 			end
      end
 if matches[1] == "setname" and matches[2] and is_mod(msg) then
-local gp_name = matches[2]
+local gp_name = string.gsub(matches[2], "_","")
 tdcli.changeChatTitle(chat, gp_name, dl_cb, nil)
 end
   if matches[1] == "setabout" and matches[2] and is_mod(msg) then
@@ -2601,7 +2601,7 @@ if matches[1] == "setlang" and is_owner(msg) then
 local hash = "gp_lang:"..msg.chat_id_
 local lang = redis:get(hash)
  redis:del(hash)
-return "`Group Language Set To:` *EN*"
+return "_Group Language Set To:_ EN"
   elseif matches[2] == "fa" then
 redis:set(hash, true)
 return "`زبان گروه تنظیم شد به : فارسی`"
@@ -2652,94 +2652,64 @@ elseif lang then
 
 text = [[
 *دستورات ربات بومباس:*
-
 *!setowner* `[username|id|reply]` 
 `انتخاب مالک گروه(قابل انتخاب چند مالک)`
-
 *!remowner* 
  `حذف کردن فرد از فهرست مالکان گروه`
-
 *!promote*  
 `ارتقا مقام کاربر به مدیر گروه`
-
 *!demote*  
 `تنزیل مقام مدیر به کاربر`
-
 *!setflood* `[1-50]`
 `تنظیم حداکثر تعداد پیام مکرر`
-
 *!silent*  
 `بیصدا کردن کاربر در گروه`
-
 *!unsilent*  
 `در آوردن کاربر از حالت بیصدا در گروه`
-
 *!kick*  
 `حذف کاربر از گروه`
-
 *!ban*  
 `مسدود کردن کاربر از گروه`
-
 *!unban*  
 `در آوردن از حالت مسدودیت کاربر از گروه`
-
 *!res* `[username]`
 `نمایش شناسه کاربر`
-
 *!whois* `[id]`
 `نمایش نام کاربر, نام کاربری و اطلاعات حساب`
-
 *!lock* `[link | tag | edit | webpage | bots | spam | flood | markdown | mention]`
 `در صورت قفل بودن فعالیت ها, ربات آنهارا حذف خواهد کرد`
-
 *!unlock* `[link | tag | edit | webpage | bots | spam | flood | markdown | mention]`
 `در صورت قفل نبودن فعالیت ها, ربات آنهارا حذف نخواهد کرد`
-
 *!mute* `[gifs | photo | document | sticker | video | text | forward | location | audio | voice | contact | all]`
 `در صورت بیصدد بودن فعالیت ها, ربات آنهارا حذف خواهد کرد`
-
 *!unmute* `[gifs | photo | document | sticker | video | text | forward | location | audio | voice | contact | all]`
 `در صورت بیصدا نبودن فعالیت ها, ربات آنهارا حذف نخواهد کرد`
-
 *!set*`[rules | name | photo | link | about]`
 `ربات آنهارا ثبت خواهد کرد`
-
 *!clean* `[bans | mods | bots | rules | about | silentlist]`   
 `ربات آنهارا پاک خواهد کرد`
-
 *!pin* `[reply]`
 `ربات پیام شمارا در گروه سنجاق خواهد کرد`
-
 *!unpin* 
 `ربات پیام سنجاق شده در گروه را حذف خواهد کرد`
-
 *!settings*
 `نمایش تنظیمات گروه`
-
 *!mutelist*
 `نمایش فهرست بیصدا های گروه`
-
 *!silentlist*
 `نمایش فهرست افراد بیصدا`
-
 *!banlist*
 `نمایش افراد مسدود شده از گروه`
-
 *!ownerlist*
 `نمایش فهرست مالکان گروه` 
-
 *!modlist* 
 `نمایش فهرست مدیران گروه`
-
 *!rules*
 `نمایش قوانین گروه`
-
 *!about*
 `نمایش درباره گروه`
-
 *!gpinfo*
 `نمایش اطلاعات گروه`
-
 *!link*
 `نمایش لینک گروه`
 
