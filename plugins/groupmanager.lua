@@ -180,10 +180,10 @@ local function owner_cb(arg, data)
 local hash = "gp_lang:"..arg.chat_id
 local lang = redis:get(hash)
     local administration = load_data(_config.moderation.data)
-if data.username_ and not data.username_:match("_") then
-user_name = '@'..data.username_
+if data.username_ then
+user_name = '@'..check_markdown(data.username_)
 else
-user_name = data.first_name_
+user_name = check_markdown(data.first_name_)
 end
 if administration[tostring(arg.chat_id)]['owners'][tostring(data.id_)] then
     if not lang then
@@ -210,10 +210,10 @@ local function promote_cb(arg, data)
 local hash = "gp_lang:"..arg.chat_id
 local lang = redis:get(hash)
     local administration = load_data(_config.moderation.data)
-if data.username_ and not data.username_:match("_") then
-user_name = '@'..data.username_
+if data.username_ then
+ user_name = '@'..check_markdown(data.username_)
 else
-user_name = data.first_name_
+user_name = check_markdown(data.first_name_)
 end
 if administration[tostring(arg.chat_id)]['mods'][tostring(data.id_)] then
    if not lang then
@@ -240,10 +240,10 @@ local function rem_owner_cb(arg, data)
 local hash = "gp_lang:"..arg.chat_id
 local lang = redis:get(hash)
     local administration = load_data(_config.moderation.data)
-if data.username_ and not data.username_:match("_") then
-user_name = '@'..data.username_
+if data.username_ then
+ user_name = '@'..check_markdown(data.username_)
 else
-user_name = data.first_name_
+user_name = check_markdown(data.first_name_)
 end
 if not administration[tostring(arg.chat_id)]['owners'][tostring(data.id_)] then
    if not lang then
@@ -268,10 +268,10 @@ tdcli_function ({
     if cmd == "demote" then
 local function demote_cb(arg, data)
     local administration = load_data(_config.moderation.data)
-if data.username_ and not data.username_:match("_") then
-user_name = '@'..data.username_
+if data.username_ then
+user_name = '@'..check_markdown(data.username_)
 else
-user_name = data.first_name_
+user_name = check_markdown(data.first_name_)
 end
 if not administration[tostring(arg.chat_id)]['mods'][tostring(data.id_)] then
     if not lang then
@@ -316,10 +316,10 @@ else
     return tdcli.sendMessage(data.chat_id_, "", 0, "`گروه به لیست گروه های مدیریتی ربات اضافه نشده است`", 0, "md")
      end
   end
-if data.type_.user_.username_ and not data.type_.user_.username_:match("_") then
-user_name = '@'..data.type_.user_.username_
+if data.type_.user_.username_ then
+user_name = '@'..check_markdown(data.type_.user_.username_)
 else
-user_name = data.title_
+user_name = check_markdown(data.title_)
 end
 if not arg.username then return false end
 if cmd == "setowner" then
@@ -391,15 +391,15 @@ end
 end
     if cmd == "res" then
     if not lang then
-     text = "Result for [ ".. data.type_.user_.username_ .." ] :\n"
-    .. "".. data.title_ .."\n"
+    text = "Result for [ ".. check_markdown(data.type_.user_.username_) .." ] :\n"
+    .. "".. check_markdown(data.title_) .."\n"
     .. " [".. data.id_ .."]"
   else
-     text = "اطلاعات برای [ ".. data.type_.user_.username_ .." ] :\n"
+    text = "اطلاعات برای [ ".. data.type_.user_.username_ .." ] :\n"
     .. "".. data.title_ .."\n"
     .. " [".. data.id_ .."]"
-       return tdcli.sendMessage(arg.chat_id, 0, 1, text, 1)
-      end
+    return tdcli.sendMessage(arg.chat_id, 0, 1, text, 1, 'md')
+    end
    end
 end
 
@@ -417,10 +417,10 @@ else
   end
 if not tonumber(arg.user_id) then return false end
 if data.first_name_ then
-if data.username_ and not data.username_:match("_") then
-user_name = '@'..data.username_
+if data.username_ then
+user_name = '@'..check_markdown(data.username_)
 else
-user_name = data.first_name_
+user_name = check_markdown(data.first_name_)
 end
   if cmd == "setowner" then
   if administration[tostring(arg.chat_id)]['owners'][tostring(data.id_)] then
@@ -488,7 +488,7 @@ administration[tostring(arg.chat_id)]['mods'][tostring(data.id_)] = nil
 end
     if cmd == "whois" then
 if data.username_ then
-username = '@'..data.username_
+user_name = check_markdown(data.first_name_)
 else
 if not lang then
 username = 'not found'
@@ -2555,7 +2555,7 @@ tdcli_function ({
 			end
      end
 if matches[1] == "setname" and matches[2] and is_mod(msg) then
-local gp_name = string.gsub(matches[2], "_","")
+local gp_name = matches[2]
 tdcli.changeChatTitle(chat, gp_name, dl_cb, nil)
 end
   if matches[1] == "setabout" and matches[2] and is_mod(msg) then
@@ -2643,6 +2643,7 @@ text = [[
 *!about*
 *!gpinfo*
 *!link*
+*!setwelcome [text]*
 
 `You Can Use [!/#] To Run The Commands`
 
@@ -2720,6 +2721,8 @@ text = [[
 `نمایش اطلاعات گروه`
 *!link*
 `نمایش لینک گروه`
+*!setwelcome [text]*
+`گذاشتن خوش امد`
 
 `شما میتوانید از [!/#] در اول دستورات برای اجرای آنها بهره بگیرید`
 
@@ -2728,6 +2731,62 @@ end
 return text
 end
 end
+--------------------- Welcome -----------------------
+ local function run(msg, matches)
+ local lang = redis:get("gp_lang:"..msg.chat_id_)
+ ----------------------------------------
+ if matches[1] == 'setwelcome' and matches[2] then
+ 	if not lang then
+ 		welcome = check_markdown(matches[2])
+ 		redis:hset('beyond_welcome',msg.chat_id_,tostring(welcome))
+ 		tdcli.sendMessage(msg.chat_id_, msg.id_, 1, 'Welcome Message Seted :\n\n'..matches[2], 1, 'md')
+ 	else
+ 		welcome = check_markdown(matches[2])
+ 		redis:hset('beyond_welcome',msg.chat_id_,tostring(welcome))
+ 		tdcli.sendMessage(msg.chat_id_, msg.id_, 1, 'پیام خوش آمد ثبت شد:\n\n'..matches[2], 1, 'md')
+ 	end
+ end
+ -----------------------------------------
+ if matches[1] == 'delwelcome' then
+ 	if not lang then
+ 		if not redis:hget('bombus_welcome',msg.chat_id_) then
+ 			tdcli.sendMessage(msg.chat_id_, msg.id_, 1, '*Already No welcome message available!*', 1, 'md')
+ 		else
+ 			redis:hdel('bombus_welcome',msg.chat_id_)
+ 			tdcli.sendMessage(msg.chat_id_, msg.id_, 1, '*Weclome Message Deleted!*', 1, 'md')
+ 		end
+ 	else
+ 		if not redis:hget('bombus_welcome',msg.chat_id_) then
+ 			tdcli.sendMessage(msg.chat_id_, msg.id_, 1, '`در حال حاضر هیچ پیام خوش آمد گویی وجود ندارد !`', 1, 'md')
+ 		else
+ 		welcome = check_markdown(matches[2])
+ 			redis:hdel('bombus_welcome',msg.chat_id_)
+ 			tdcli.sendMessage(msg.chat_id_, msg.id_, 1, '`پیام خوش آمد گویی حذف شد`', 1, 'md')
+ 		end
+ 	end
+ end
+ end
+ -----------------------------------------
+ local function pre_process(msg)
+ 	if msg.content_.members_ then
+ 		if redis:hget('bombus_welcome',msg.chat_id_) then
+ 			if msg.content_.members_[0] then
+ 				name = msg.content_.members_[0].first_name_
+ 				if msg.content_.members_[0].type_.ID == 'UserTypeBot' then
+ 					return nil
+ 				else
+ 					data = redis:hget('bombus_welcome',msg.chat_id_)
+ 					if data:match('{name}') then
+ 						out = data:gsub('{name}',name)
+ 					else
+						out = data
+ 					end
+ 						tdcli.sendMessage(msg.chat_id_, msg.id_, 1, tostring(out:gsub('\\_','_')), 1, 'md')
+ 			end
+ 			end
+ 		end
+ 	end
+ end
 return {
 patterns ={
 "^[!/#](id)$",
@@ -2769,7 +2828,10 @@ patterns ={
 "^[!/#](setlang) (.*)$",
 "^([https?://w]*.?t.me/joinchat/%S+)$",
 "^([https?://w]*.?telegram.me/joinchat/%S+)$",
+"^[!/#](setwelcome) (.*)",
+"^[!/#](delwelcome)$"
 },
-run=run
+run=run,
+pre_process = pre_process
 }
 --end groupmanager.lua 
