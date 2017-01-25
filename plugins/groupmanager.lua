@@ -2625,8 +2625,8 @@ text = [[
 *!unban*  
 *!res* `[username]`
 *!whois* `[id]`
-*!lock* `[link | tag | edit | webpage | bots | spam | flood | markdown | mention]`
-*!unlock* `[link | tag | edit | webpage | bots | spam | flood | markdown | mention]`
+*!lock* `[link | tag | edit | webpage | bots | spam | flood | markdown | mention | fosh]`
+*!unlock* `[link | tag | edit | webpage | bots | spam | flood | markdown | mention| fosh]`
 *!mute* `[gifs | photo | document | sticker | video | text | forward | location | audio | voice | contact | all]`
 *!unmute* `[gifs | photo | document | sticker | video | text | forward | location | audio | voice | contact | all]`
 *!set*`[rules | name | photo | link | about]`
@@ -2643,6 +2643,12 @@ text = [[
 *!about*
 *!gpinfo*
 *!link*
+*setexpire (1) & expire *
+*!filter (world)*
+*!unfilter*
+*!filterlist*
+*!mt (1)(1) &  !unmt*   
+_lock time expire_
 
 `You Can Use [!/#] To Run The Commands`
 
@@ -2678,10 +2684,10 @@ text = [[
 *!whois* `[id]`
 `نمایش نام کاربر, نام کاربری و اطلاعات حساب`
 
-*!lock* `[link | tag | edit | webpage | bots | spam | flood | markdown | mention]`
+*!lock* `[link | tag | edit | webpage | bots | spam | flood | markdown | mention | fosh]`
 `در صورت قفل بودن فعالیت ها, ربات آنهارا حذف خواهد کرد`
 
-*!unlock* `[link | tag | edit | webpage | bots | spam | flood | markdown | mention]`
+*!unlock* `[link | tag | edit | webpage | bots | spam | flood | markdown | mention | fosh]`
 `در صورت قفل نبودن فعالیت ها, ربات آنهارا حذف نخواهد کرد`
 
 *!mute* `[gifs | photo | document | sticker | video | text | forward | location | audio | voice | contact | all]`
@@ -2720,6 +2726,16 @@ text = [[
 `نمایش اطلاعات گروه`
 *!link*
 `نمایش لینک گروه`
+*setexpire (1) & expire *
+`زمان دار کردن ربات درگروه`
+*!filter (world)*
+`فیلترکلمه`
+*!unfilter*
+`دراوردن کلمه از فیلتر`
+*!filterlist*
+`کلمات فیلتر شده`
+*!mt 1 1 | برای باز کردن >> !unmt*
+`قفل چت زمان دار`
 
 `شما میتوانید از [!/#] در اول دستورات برای اجرای آنها بهره بگیرید`
 
