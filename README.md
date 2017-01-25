@@ -1,4 +1,4 @@
-# BomBus# [BOMBUSMOD](https://telegram.me/AnonySECURITY)
+# [BOMBUSMOD](https://telegram.me/AnonySECURITY)
 
 **An advanced and powerful administration bot based on NEW TG-CLI
 
