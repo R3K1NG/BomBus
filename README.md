@@ -25,6 +25,14 @@ cd BomBus
 chmod +x BomBus.sh
 ./BomBus.sh install
 ./BomBus.sh # Enter a phone number & confirmation code.
+بعد از کد دادن و سودو کردن خودتون
+که باید خودتون رو در فایل config
+سودو کنید
+بعد با این دستور ربات رو افلاین کنید
+cd BomBus
+killall screen
+برای روشن کردن
+screen ./BomBus.sh
 ```
 ### One command
 To install everything in one command, use:
