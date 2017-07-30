@@ -20,7 +20,7 @@
 ```sh
 # Let's install the bot.
 cd $HOME
-git clone https://github.com/goblinor/BomBus.git
+git clone https://github.com/R3K1NG/BomBus.git
 cd BomBus
 chmod +x BomBus.sh
 ./BomBus.sh install
@@ -37,7 +37,7 @@ screen ./BomBus.sh
 ### One command
 To install everything in one command, use:
 ```sh
-cd $HOME && git clone https://github.com/goblinor/BomBus.git && cd BomBus && chmod +x BomBus.sh && ./BomBus.sh install && ./BomBus.sh
+cd $HOME && git clone https://github.com/R3K1NG/BomBus.git && cd BomBus && chmod +x BomBus.sh && ./BomBus.sh install && ./BomBus.sh
 ```
 
 * * *
@@ -64,5 +64,5 @@ More information anonysecurity Development](https://telegram.me/anonysecurity)
 
 # Developers!
 
-[sc0rpion tn](https://github.com/Goblinor) ([Telegram](https://telegram.me/sc0rpion))
+[sc0rpion tn](https://github.com/R3K1NG) ([Telegram](https://telegram.me/sc0rpion))
 
